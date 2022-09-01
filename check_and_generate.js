@@ -1,16 +1,18 @@
 var Airtable = require('airtable');
 var base = new Airtable({apiKey: process.env.airtable_api_key}).base('appZkOuyJHvk7kfLu');
 
+let prompt_obj = {};
 base('Generations').select({
     // Selecting the first 3 records in Grid view:
     maxRecords: 3,
-    view: "Grid view"
+    view: "Waiting for generation"
 }).eachPage(function page(records, fetchNextPage) {
     // This function (`page`) will get called for each page of records.
-
-    records.forEach(function(record) {
-        console.log('Retrieved', record.get('Prompt'));
-    });
+    let record = records[0];
+    prompt_obj = {
+      id: record.id,
+      prompt: record.get("Prompt")
+    }
 
     // To fetch the next page of records, call `fetchNextPage`.
     // If there are more records, `page` will get called again.
